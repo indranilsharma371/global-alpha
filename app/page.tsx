@@ -1,5 +1,47 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
 export default function Home() {
+
+  const [marketData, setMarketData] = useState({
+    nifty: 22530,
+    sensex: 74213,
+    nasdaq: 16920,
+    bitcoin: 68400,
+  });
+
+  useEffect(() => {
+    async function fetchMarketData() {
+      try {
+        const apiKey = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
+
+        const btcRes = await fetch(
+          `https://finnhub.io/api/v1/quote?symbol=BINANCE:BTCUSDT&token=${apiKey}`
+        );
+
+        const btcData = await btcRes.json();
+
+console.log("BTC DATA:", btcData);
+
+setMarketData((prev) => ({
+  ...prev,
+  bitcoin: Number(btcData.c || 68400),
+}));
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchMarketData();
+
+    const interval = setInterval(fetchMarketData, 10000);
+
+    return () => clearInterval(interval);
+
+  }, []);
   return (
     <main className="bg-black text-white min-h-screen">
 
@@ -57,49 +99,70 @@ export default function Home() {
       </section>
 
       {/* Featured Section */}
-      <section className="px-10 py-20">
-        <h3 className="text-4xl font-bold mb-12">
-          Featured Analysis
-        </h3>
+{/* Market Watch */}
+<section className="px-10 py-20 border-t border-gray-900">
+  <div className="flex justify-between items-center mb-12">
+    <h3 className="text-5xl font-bold">
+      Market Watch
+    </h3>
 
-        <div className="grid md:grid-cols-3 gap-8">
+    <p className="text-yellow-400 tracking-[0.3em] uppercase">
+      Live Global Sentiment
+    </p>
+  </div>
 
-          <div className="bg-zinc-900 p-8 rounded-2xl">
-            <h4 className="text-2xl font-semibold mb-4">
-              Global Economic Trends
-            </h4>
+  <div className="grid md:grid-cols-4 gap-8">
 
-            <p className="text-gray-400">
-              Deep analysis of world economies, inflation,
-              central banks, and financial systems.
-            </p>
-          </div>
+    <div className="bg-[#020817] border border-blue-950 rounded-3xl p-8">
+      <p className="text-gray-400 mb-4">NIFTY 50</p>
 
-          <div className="bg-zinc-900 p-8 rounded-2xl">
-            <h4 className="text-2xl font-semibold mb-4">
-              Stock Market Intelligence
-            </h4>
+      <h3 className="text-5xl font-bold">
+        {marketData.nifty.toLocaleString()}
+      </h3>
 
-            <p className="text-gray-400">
-              Market insights, technical analysis,
-              investment strategies, and portfolio research.
-            </p>
-          </div>
+      <p className="text-green-400 mt-4 text-xl font-semibold">
+        LIVE
+      </p>
+    </div>
 
-          <div className="bg-zinc-900 p-8 rounded-2xl">
-            <h4 className="text-2xl font-semibold mb-4">
-              Geopolitical Affairs
-            </h4>
+    <div className="bg-[#020817] border border-blue-950 rounded-3xl p-8">
+      <p className="text-gray-400 mb-4">SENSEX</p>
 
-            <p className="text-gray-400">
-              Coverage of global conflicts, diplomacy,
-              trade wars, and strategic affairs.
-            </p>
-          </div>
+      <h3 className="text-5xl font-bold">
+        {marketData.sensex.toLocaleString()}
+      </h3>
 
-        </div>
-      </section>
+      <p className="text-green-400 mt-4 text-xl font-semibold">
+        LIVE
+      </p>
+    </div>
 
+    <div className="bg-[#020817] border border-blue-950 rounded-3xl p-8">
+      <p className="text-gray-400 mb-4">NASDAQ</p>
+
+      <h3 className="text-5xl font-bold">
+        {marketData.nasdaq.toLocaleString()}
+      </h3>
+
+      <p className="text-green-400 mt-4 text-xl font-semibold">
+        LIVE
+      </p>
+    </div>
+
+    <div className="bg-[#020817] border border-blue-950 rounded-3xl p-8">
+      <p className="text-gray-400 mb-4">BITCOIN</p>
+
+      <h3 className="text-5xl font-bold">
+        ${marketData.bitcoin.toLocaleString()}
+      </h3>
+
+      <p className="text-green-400 mt-4 text-xl font-semibold">
+        LIVE
+      </p>
+    </div>
+
+  </div>
+</section>
       {/* Footer */}
       <footer className="border-t border-gray-800 py-10 text-center text-gray-500">
         © 2026 Global Alpha — Founded by Indranil Sharma
