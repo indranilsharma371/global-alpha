@@ -9,11 +9,12 @@ export default function Home() {
         </h1>
 
         <div className="flex gap-8 text-gray-300">
-          <a href="#">Markets</a>
-          <a href="#">World Affairs</a>
-          <a href="#">Blogs</a>
-          <a href="#">YouTube</a>
-        </div>
+  <a href="/markets">Markets</a>
+  <a href="/blog">Blogs</a>
+  <a href="/youtube">YouTube</a>
+  <a href="/about">About</a>
+  <a href="/contact">Contact</a>
+</div>
       </nav>
 
       {/* Hero Section */}
