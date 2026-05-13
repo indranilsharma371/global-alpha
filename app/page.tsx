@@ -4,28 +4,28 @@ export default function Home() {
     <main className="bg-black text-white min-h-screen">
 
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-10 py-6 border-b border-gray-800">
-<div className="flex items-center gap-3">
+<nav className="flex justify-between items-center px-16 py-6 border-b border-gray-800 backdrop-blur-md bg-black/80 sticky top-0 z-50">
+<div className="flex items-center gap-4">
   <Image
     src="/logo.png"
     alt="Global Alpha Logo"
-    width={60}
-    height={60}
-    className="rounded-full"
+    width={90}
+    height={90}
+    className="rounded-full object-cover"
   />
 
   <div>
-    <h1 className="text-3xl font-bold tracking-wide">
+    <h1 className="text-5xl font-extrabold tracking-wide bg-gradient-to-r from-white via-yellow-200 to-yellow-500 bg-clip-text text-transparent">
       Global Alpha
     </h1>
 
-    <p className="text-sm text-yellow-400 tracking-widest">
+    <p className="text-lg tracking-[0.25em] uppercase text-yellow-400 font-semibold mt-1">
       Insights Today. Advantage Tomorrow.
     </p>
   </div>
 </div>
 
-        <div className="flex gap-8 text-gray-300">
+<div className="flex gap-10 text-gray-300 text-lg font-medium">
   <a href="/markets">Markets</a>
   <a href="/blog">Blogs</a>
   <a href="/youtube">YouTube</a>
