@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "Global Alpha",
   description:
     "Global Alpha covers stock markets, geopolitics, investing, world affairs, and strategic intelligence.",
+    verification: {
+    google: "6pyo1pAQ0UHhKuZ7Nw0b4eACZqLQZyvryF2mVmzvLVk",
+  },
 };
 
 export default function RootLayout({
