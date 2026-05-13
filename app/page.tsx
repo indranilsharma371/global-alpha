@@ -1,12 +1,29 @@
+import Image from "next/image";
 export default function Home() {
   return (
     <main className="bg-black text-white min-h-screen">
 
       {/* Navbar */}
       <nav className="flex justify-between items-center px-10 py-6 border-b border-gray-800">
-        <h1 className="text-3xl font-bold tracking-wide">
-          Global Alpha
-        </h1>
+<div className="flex items-center gap-3">
+  <Image
+    src="/logo.png"
+    alt="Global Alpha Logo"
+    width={60}
+    height={60}
+    className="rounded-full"
+  />
+
+  <div>
+    <h1 className="text-3xl font-bold tracking-wide">
+      Global Alpha
+    </h1>
+
+    <p className="text-sm text-yellow-400 tracking-widest">
+      Insights Today. Advantage Tomorrow.
+    </p>
+  </div>
+</div>
 
         <div className="flex gap-8 text-gray-300">
   <a href="/markets">Markets</a>
