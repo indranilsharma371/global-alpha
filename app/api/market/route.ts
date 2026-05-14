@@ -2,80 +2,67 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const symbols = [
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true",
+      {
+        cache: "no-store",
+      }
+    );
+
+    const cryptoData = await response.json();
+
+    // Static market values + live Bitcoin
+    const marketData = [
       {
         name: "NIFTY 50",
-        symbol: "^NSEI",
-      },
-      {
-        name: "SENSEX",
-        symbol: "^BSESN",
+        value: "24,350",
+        change: "+0.84%",
       },
       {
         name: "NASDAQ",
-        symbol: "^IXIC",
+        value: "19,120",
+        change: "+1.12%",
+      },
+      {
+        name: "SENSEX",
+        value: "79,850",
+        change: "+0.72%",
       },
       {
         name: "BITCOIN",
-        symbol: "BTC-USD",
+        value: `$${cryptoData.bitcoin.usd.toLocaleString()}`,
+        change: `${cryptoData.bitcoin.usd_24h_change.toFixed(2)}%`,
       },
     ];
 
-    const results = await Promise.all(
-      symbols.map(async (item) => {
-        const url = `https://query1.finance.yahoo.com/v8/finance/chart/${item.symbol}`;
-
-        const res = await fetch(url, {
-          headers: {
-            "User-Agent": "Mozilla/5.0",
-          },
-          cache: "no-store",
-        });
-
-        const data = await res.json();
-
-        const result =
-          data?.chart?.result?.[0]?.meta;
-
-        if (!result) {
-          return {
-            name: item.name,
-            value: "Unavailable",
-            change: "0%",
-          };
-        }
-
-        const price =
-          result.regularMarketPrice;
-
-        const previousClose =
-          result.previousClose;
-
-        const percent =
-          previousClose
-            ? (
-                ((price - previousClose) /
-                  previousClose) *
-                100
-              ).toFixed(2)
-            : "0";
-
-        return {
-          name: item.name,
-          value:
-            item.name === "BITCOIN"
-              ? `$${Number(price).toLocaleString()}`
-              : Number(price).toLocaleString(),
-          change: `${percent}%`,
-        };
-      })
-    );
-
-    return NextResponse.json(results);
+    return NextResponse.json(marketData);
   } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
-      { error: "Failed to fetch market data" },
-      { status: 500 }
+      [
+        {
+          name: "NIFTY 50",
+          value: "24,350",
+          change: "+0.84%",
+        },
+        {
+          name: "NASDAQ",
+          value: "19,120",
+          change: "+1.12%",
+        },
+        {
+          name: "SENSEX",
+          value: "79,850",
+          change: "+0.72%",
+        },
+        {
+          name: "BITCOIN",
+          value: "N/A",
+          change: "0%",
+        },
+      ],
+      { status: 200 }
     );
   }
 }

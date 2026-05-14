@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import GlobalNews from "@/components/GlobalNews";
 
 
 
@@ -39,9 +40,19 @@ const [marketData, setMarketData] = useState<
 useEffect(() => {
   async function fetchMarketData() {
     try {
-      const res = await fetch("/api/market");
+const res = await fetch("/api/market");
 
-      const data = await res.json();
+if (!res.ok) {
+  throw new Error("Failed to fetch market data");
+}
+
+const text = await res.text();
+
+if (!text) {
+  return;
+}
+
+const data = JSON.parse(text);
 
 console.log("API DATA:", data);
 
@@ -59,6 +70,73 @@ setMarketData(Array.isArray(data) ? data : []);
 }, []);
   return (
 <main className="bg-black text-white min-h-screen overflow-x-hidden pt-32">
+{/* TradingView Ticker Tape */}
+<div className="w-full border-b border-yellow-500/10 bg-black overflow-hidden">
+  <iframe
+    className="w-full h-[70px]"
+    srcDoc={`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+          }
+        </style>
+      </head>
+
+      <body>
+        <div class="tradingview-widget-container">
+          <div class="tradingview-widget-container__widget"></div>
+
+          <script
+            type="text/javascript"
+            src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+            async
+          >
+          {
+            "symbols": [
+              {
+                "proName": "FOREXCOM:SPXUSD",
+                "title": "S&P 500"
+              },
+              {
+                "proName": "NASDAQ:IXIC",
+                "title": "NASDAQ"
+              },
+              {
+                "proName": "NSE:BANKNIFTY1!"
+                "title": "BANK NIFTY"
+              },
+              {
+                "proName": "BSE:SENSEX",
+                "title": "SENSEX"
+              },
+              {
+                "proName": "BINANCE:BTCUSDT",
+                "title": "BITCOIN"
+              },
+              {
+                "proName": "FX_IDC:USDINR",
+                "title": "USD/INR"
+              }
+            ],
+
+            "showSymbolLogo": true,
+            "isTransparent": true,
+            "displayMode": "adaptive",
+            "colorTheme": "dark",
+            "locale": "en"
+          }
+          </script>
+        </div>
+      </body>
+      </html>
+    `}
+  />
+</div>
       {/* Navbar */}
 <nav
   className="
@@ -224,7 +302,7 @@ setMarketData(Array.isArray(data) ? data : []);
           </div>
         </div>
       </section>
-
+<GlobalNews />
       {/* Insights Section */}
       <section className="px-10 py-20 border-b border-gray-900">
         <div className="max-w-7xl mx-auto">
