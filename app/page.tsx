@@ -53,10 +53,7 @@ setMarketData(Array.isArray(data) ? data : []);
 
   fetchMarketData();
 
-  const interval = setInterval(
-    fetchMarketData,
-    60000
-  );
+  const interval = setInterval(fetchMarketData, 10000);
 
   return () => clearInterval(interval);
 }, []);

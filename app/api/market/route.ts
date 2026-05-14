@@ -27,8 +27,7 @@ export async function GET() {
 
         const res = await fetch(url, {
           headers: {
-            "User-Agent":
-              "Mozilla/5.0",
+            "User-Agent": "Mozilla/5.0",
           },
           cache: "no-store",
         });
@@ -42,7 +41,7 @@ export async function GET() {
           return {
             name: item.name,
             value: "Unavailable",
-            change: "N/A",
+            change: "0%",
           };
         }
 
@@ -74,12 +73,8 @@ export async function GET() {
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error(error);
-
     return NextResponse.json(
-      {
-        error: "Failed to fetch market data",
-      },
+      { error: "Failed to fetch market data" },
       { status: 500 }
     );
   }
