@@ -1,13 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-const marketData = [
-  { name: "NIFTY 50", value: "22,530", change: "+0.68%" },
-  { name: "SENSEX", value: "74,213", change: "+0.59%" },
-  { name: "NASDAQ", value: "16,920", change: "+1.26%" },
-  { name: "BITCOIN", value: "$68,400", change: "+2.12%" },
-];
+
 
 const insights = [
   {
@@ -31,10 +27,53 @@ const insights = [
 ];
 
 export default function Home() {
+
+const [marketData, setMarketData] = useState<
+  {
+    name: string;
+    value: string;
+    change: string;
+  }[]
+>([]);
+
+useEffect(() => {
+  async function fetchMarketData() {
+    try {
+      const res = await fetch("/api/market");
+
+      const data = await res.json();
+
+console.log("API DATA:", data);
+
+setMarketData(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  fetchMarketData();
+
+  const interval = setInterval(
+    fetchMarketData,
+    60000
+  );
+
+  return () => clearInterval(interval);
+}, []);
   return (
-    <main className="bg-black text-white min-h-screen overflow-x-hidden">
+<main className="bg-black text-white min-h-screen overflow-x-hidden pt-32">
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-16 py-5 border-b border-gray-800 bg-black/90 backdrop-blur sticky top-0 z-50">
+<nav
+  className="
+    flex justify-between items-center
+    px-16 py-5
+    fixed top-0 left-0 w-full z-50
+    bg-black/80
+    backdrop-blur-xl
+    border-b border-yellow-500/10
+    shadow-[0_8px_30px_rgba(0,0,0,0.5)]
+  "
+>
         <div className="flex items-center gap-4">
           <Image
             src="/logo.png"
@@ -55,27 +94,59 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex gap-10 text-gray-300 text-lg font-medium">
-          <a href="/markets" className="hover:text-yellow-400 transition">
-            Markets
-          </a>
+<div className="hidden md:flex items-center gap-4">
+  {[
+    "Markets",
+    "Blogs",
+    "YouTube",
+    "About",
+    "Contact",
+  ].map((item) => (
+    <a
+      key={item}
+      href={`/${item.toLowerCase()}`}
+      className="
+        relative
+        px-5 py-2.5
+        rounded-full
+        text-[15px]
+        font-medium
+        tracking-wide
+        text-gray-200
+        transition-all
+        duration-300
+        border border-transparent
+        hover:border-yellow-500/40
+        hover:text-yellow-400
+        hover:bg-white/5
+        hover:shadow-[0_0_20px_rgba(255,215,0,0.15)]
+        backdrop-blur-md
+        group
+        hover:scale-105
+      "
+    >
+      <span className="relative z-10">{item}</span>
 
-          <a href="/blog" className="hover:text-yellow-400 transition">
-            Blogs
-          </a>
-
-          <a href="/youtube" className="hover:text-yellow-400 transition">
-            YouTube
-          </a>
-
-          <a href="/about" className="hover:text-yellow-400 transition">
-            About
-          </a>
-
-          <a href="/contact" className="hover:text-yellow-400 transition">
-            Contact
-          </a>
-        </div>
+      <span
+        className="
+          absolute
+          left-1/2
+          bottom-1
+          h-[2px]
+          w-0
+          bg-gradient-to-r
+          from-yellow-400
+          to-yellow-600
+          transition-all
+          duration-300
+          group-hover:w-3/5
+          group-hover:left-[20%]
+          rounded-full
+        "
+      />
+    </a>
+  ))}
+</div>
       </nav>
 
       {/* Hero Section */}
