@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import GlobalNews from "@/components/GlobalNews";
+import IndiaNews from "@/components/IndiaNews";
+
 
 
 
@@ -231,6 +233,7 @@ export default function Home() {
 
   
 <GlobalNews />
+<IndiaNews />
       {/* Insights Section */}
       <section className="px-10 py-20 border-b border-gray-900">
         <div className="max-w-7xl mx-auto">
