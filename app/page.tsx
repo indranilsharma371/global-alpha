@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GlobalNews from "@/components/GlobalNews";
 
 
@@ -29,45 +29,7 @@ const insights = [
 
 export default function Home() {
 
-const [marketData, setMarketData] = useState<
-  {
-    name: string;
-    value: string;
-    change: string;
-  }[]
->([]);
 
-useEffect(() => {
-  async function fetchMarketData() {
-    try {
-const res = await fetch("/api/market");
-
-if (!res.ok) {
-  throw new Error("Failed to fetch market data");
-}
-
-const text = await res.text();
-
-if (!text) {
-  return;
-}
-
-const data = JSON.parse(text);
-
-console.log("API DATA:", data);
-
-setMarketData(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  fetchMarketData();
-
-  const interval = setInterval(fetchMarketData, 10000);
-
-  return () => clearInterval(interval);
-}, []);
   return (
 <main className="bg-black text-white min-h-screen overflow-x-hidden pt-32">
 {/* TradingView Ticker Tape */}
@@ -267,41 +229,7 @@ setMarketData(Array.isArray(data) ? data : []);
         </div>
       </section>
 
-      {/* Market Watch */}
-      <section className="px-10 py-16 border-b border-gray-900">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="text-4xl font-bold">
-              Market Watch
-            </h3>
-
-            <p className="text-yellow-400 uppercase tracking-[0.2em] text-sm">
-              Live Global Sentiment
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-4 gap-6">
-            {marketData.map((item, index) => (
-              <div
-                key={index}
-                className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl p-6 hover:border-yellow-500 transition"
-              >
-                <p className="text-gray-400 text-sm uppercase tracking-wide">
-                  {item.name}
-                </p>
-
-                <h4 className="text-3xl font-bold mt-3">
-                  {item.value}
-                </h4>
-
-                <p className="text-green-400 mt-3 font-semibold text-lg">
-                  {item.change}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+  
 <GlobalNews />
       {/* Insights Section */}
       <section className="px-10 py-20 border-b border-gray-900">
